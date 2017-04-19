@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+		<artifactId>p2p</artifactId>
+		<groupId>com.elend</groupId>
+		<version>1.0.0</version>
+		<!--<relativePath>..</relativePath>-->
+	</parent>
+	<artifactId>p2p-workflow</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>流程公共模块</description>
+	<build>  
+    	<plugins>  
+      		<plugin>  
+			    <groupId>com.elend.maven</groupId>  
+			    <artifactId>maven-code-generate-plugin</artifactId>  
+			    <version>2.0</version>  
+      		</plugin>  
+    	</plugins>  
+  	</build>
+  	<profiles>  
+        <profile>  
+             <id>code-generate-profile</id>  
+             <properties>  
+                  <url>jdbc:mysql://mysql.elend.gzdai.com:3306/elend?useUnicode=true&amp;amp;characterEncoding=utf8&amp;amp;autoReconnect=true</url>  
+                  <username>elend</username>  
+                  <password>Tv35Rx6+</password>  
+                  <tableName>s_partner_info</tableName>
+                  <packageName>com.elend.p2p.gateway</packageName> 
+                  <searchParams>partner_id</searchParams>
+                   
+                  <mapperFlag>false</mapperFlag> 
+                  <mybatisXmlFlag>false</mybatisXmlFlag> 
+                  <serviceFlag>true</serviceFlag> 
+                  <serviceImplFlag>true</serviceImplFlag> 
+                  <modelFlag>false</modelFlag> 
+                  <voFlag>false</voFlag> 
+                  <searchVoFlag>false</searchVoFlag> 
+                  <controllerFlag>false</controllerFlag> 
+             </properties>  
+        </profile>  
+ 	</profiles>
+	<dependencies>
+		<dependency>
+			<groupId>com.elend</groupId>
+			<artifactId>p2p-util</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.elend</groupId>
+			<artifactId>p2p-msg-client</artifactId>
+			<version>1.0.1</version>
+		</dependency> -->
+	    <dependency>
+	      <groupId>org.activiti</groupId>
+	      <artifactId>activiti-spring</artifactId>
+	      <version>5.15.1</version>
+	    </dependency>				
+	</dependencies>
+</project>
