@@ -1,13 +1,12 @@
 package com.elend.p2p.workflow;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimerTask;
 
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.identity.User;
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +25,16 @@ public class WorkflowUserInfoData extends TimerTask{
     @Autowired
     private IdentityService identityService;
     
-    private Map<String,UserInfo> userMap;
+    private LRUMap userMap;
+    /**
+     * 缓存最大存放大小
+     */
+    private static final int CACHE_MAX_SIZE=128;
+    //private Map<String,UserInfo> userMap;
     
     public WorkflowUserInfoData(){
-        userMap=new HashMap<String, UserInfo>();
+        userMap=new LRUMap(CACHE_MAX_SIZE);
+        //userMap=new HashMap<String, UserInfo>();
     }
     
     /**
@@ -55,9 +60,16 @@ public class WorkflowUserInfoData extends TimerTask{
      * @return
      */
     public String getUsername(String id){
-        UserInfo user=userMap.get(id);
-        if(user==null)return "";
-        return user.getUsername();
+        UserInfo user=userMap.containsKey(id)?(UserInfo)userMap.get(id):null;
+        if(user!=null){
+            return user.getUsername();
+        }
+        User activitiUser=identityService.createUserQuery().userId(id).singleResult();
+        UserInfo userInfo=new UserInfo();
+        userInfo.setUsername((activitiUser.getLastName()==null?"":activitiUser.getLastName())+activitiUser.getFirstName());
+        userInfo.setId(activitiUser.getId());
+        userMap.put(activitiUser.getId(), userInfo);
+        return userInfo.getUsername();
     }
 
     @Override

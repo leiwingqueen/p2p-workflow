@@ -1,17 +1,13 @@
 package com.elend.p2p.workflow;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TimerTask;
 
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.elend.p2p.workflow.vo.ProcessDefinitionVO;
 
@@ -25,15 +21,20 @@ public class ProcessDefinitionData{
     protected static Log logger = LogFactory.getLog(ProcessDefinitionData.class);
     //@Autowired
     private RepositoryService repositoryService;
-    
-    private Map<String,ProcessDefinitionVO> defintionMap;
+    /**
+     * 缓存最大存放大小
+     */
+    private static final int CACHE_MAX_SIZE=128;
+    private LRUMap defintionMap;
+    //private Map<String,ProcessDefinitionVO> defintionMap;
     
     public void setRepositoryService(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
     }
 
     public ProcessDefinitionData(){
-        defintionMap=new HashMap<String, ProcessDefinitionVO>();
+        defintionMap=new LRUMap(CACHE_MAX_SIZE);
+        //defintionMap=new HashMap<String, ProcessDefinitionVO>();
     }
     
     /**
@@ -60,8 +61,24 @@ public class ProcessDefinitionData{
      * @return
      */
     public ProcessDefinitionVO get(String id){
-        ProcessDefinitionVO def=defintionMap.get(id);
-        return def;
+        /**
+         * 1.读取缓存
+         */
+        ProcessDefinitionVO def=defintionMap.containsKey(id)?(ProcessDefinitionVO)defintionMap.get(id):null;
+        if(def!=null)return def;
+        /**
+         * 2.缓存查询失败，实时查询
+         */
+        ProcessDefinition queryResult=repositoryService.createProcessDefinitionQuery().processDefinitionId(id).singleResult();
+        if(queryResult==null){
+            return null;
+        }
+        ProcessDefinitionVO definition=new ProcessDefinitionVO();
+        definition.setId(queryResult.getId());
+        definition.setKey(queryResult.getKey());
+        definition.setName(queryResult.getName());
+        defintionMap.put(queryResult.getId(), definition);
+        return definition;
     }
 
     public void run() {
