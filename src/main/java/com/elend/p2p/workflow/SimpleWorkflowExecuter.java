@@ -2,7 +2,7 @@ package com.elend.p2p.workflow;
 
 import java.util.List;
 
-import com.elend.p2p.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 简单的任务执行类实现
@@ -26,7 +26,7 @@ public class SimpleWorkflowExecuter implements WorkflowExecuter{
 
     @Override
     public TaskExecuter getTaskExecuter(String taskDefinitionKey) {
-        if(StringUtil.isTrimEmpty(taskDefinitionKey))return null;
+        if(StringUtils.isBlank(taskDefinitionKey))return null;
         for(TaskExecuter taskExecuter:taskExecuterList){
             if(taskDefinitionKey.equals(taskExecuter.getTaskDefinitionKey())){
                 return taskExecuter;

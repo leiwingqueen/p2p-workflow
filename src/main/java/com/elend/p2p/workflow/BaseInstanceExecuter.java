@@ -8,7 +8,6 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.elend.p2p.ServiceException;
 import com.elend.p2p.workflow.exception.InstanceNotFoundException;
 import com.elend.p2p.workflow.exception.TaskNotFoundException;
 
