@@ -112,6 +112,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     @Transactional(propagation=Propagation.REQUIRED)
     public void create(String userId, Map<String, String> paramMap,
             String processDefinitionKey) {
+        //repositoryService.changeDeploymentTenantId(deploymentId, newTenantId);
         identityService.setAuthenticatedUserId(userId);//增加统一的activiti登录验证
         InstanceExecuter handler = workflowFactory.getInstanceExecuter(processDefinitionKey);
         if (handler == null) {
@@ -309,6 +310,7 @@ public class WorkflowServiceImpl implements WorkflowService {
         if(StringUtils.isNotBlank(svo.getAbstractInfo())){
             query.processVariableValueLike(PROCESS_ABSINFO_KEY, "%"+svo.getAbstractInfo()+"%");
         }
+        //query.taskCategory("http://www.activiti.org/processdef");
         List<Task> tasks = query.orderByTaskCreateTime().desc().listPage(svo.getStart(),
                                                                          svo.getSize());
         // 这里将Task转成TaskVO再返回前端，不然解析成JSON串会报错

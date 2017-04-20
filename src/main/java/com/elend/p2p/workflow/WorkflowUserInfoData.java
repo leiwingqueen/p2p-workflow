@@ -6,7 +6,9 @@ import java.util.TimerTask;
 
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.identity.User;
+import org.activiti.engine.identity.UserQuery;
 import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +62,13 @@ public class WorkflowUserInfoData extends TimerTask{
      * @return
      */
     public String getUsername(String id){
+        if(StringUtils.isBlank(id))return "";
         UserInfo user=userMap.containsKey(id)?(UserInfo)userMap.get(id):null;
         if(user!=null){
             return user.getUsername();
         }
         User activitiUser=identityService.createUserQuery().userId(id).singleResult();
+        if(activitiUser==null)return "";
         UserInfo userInfo=new UserInfo();
         userInfo.setUsername((activitiUser.getLastName()==null?"":activitiUser.getLastName())+activitiUser.getFirstName());
         userInfo.setId(activitiUser.getId());

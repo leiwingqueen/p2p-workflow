@@ -98,11 +98,6 @@
 		<property name="bakServers" value="memcached2.p2p.gzdai.com:11211"/>
 	</bean>
 	
-	<bean id="distributedSessionFilter" class="com.elend.p2p.session.SessionFilter" lazy-init="false">
-		<property name="memcache" ref="sessionMemcache" />
-		<property name="jsessionid" value="DISTRIBUTED_SESSIONID" />
-	</bean>
-	
 	
 	<bean id="normalMemcache" class="com.elend.commons.memcache.MemcacheImpl" init-method="init" destroy-method="destroy">
 		<property name="servers" value="memcached1.p2p.gzdai.com:11211,memcached2.p2p.gzdai.com:11211"/>
