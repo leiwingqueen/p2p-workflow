@@ -5,6 +5,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>流程公共模块</description>
 	<build>  
+	
     	<plugins>  
       		<plugin>  
 			    <groupId>com.elend.maven</groupId>  

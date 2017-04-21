@@ -151,30 +151,44 @@ public class WorkflowFacade {
 
     /**
      * 待办列表
-     * 
+     * @param svo
+     * 查询条件
+     * @param userId
+     * 用户ID
+     * @param appId
+     * 系统ID
      * @return
+     * 任务列表
      */
-    public PageInfo<TaskDetailVO> todoTaskList(TaskSearchVO svo,String userId){
-        return workflowService.todoTaskList(svo, userId);
+    public PageInfo<TaskDetailVO> todoTaskList(TaskSearchVO svo,String userId,String appId){
+        return workflowService.todoTaskList(svo, userId,appId);
     }
 
     /**
      * 待签收列表
-     * 
+     * @param svo
+     * 查询条件
+     * @param userId
+     * 用户ID
+     * @param appId
+     * 系统ID
      * @return
+     * 任务列表
      */
-    public PageInfo<TaskDetailVO> claimTaskList(TaskSearchVO svo,String userId){
-        return workflowService.claimTaskList(svo, userId);
+    public PageInfo<TaskDetailVO> claimTaskList(TaskSearchVO svo,String userId,String appId){
+        return workflowService.claimTaskList(svo, userId,appId);
     }
 
     /**
      * 获取该用户的所有的申请
      * 
      * @param svo
+     * @param appId
+     * 系统ID
      * @return
      */
-    public PageInfo<TaskDetailVO> getAllMyApply(InstanceSearchVO svo,String userId){
-        return workflowService.getAllMyApply(svo, userId);
+    public PageInfo<TaskDetailVO> getAllMyApply(InstanceSearchVO svo,String userId,String appId){
+        return workflowService.getAllMyApply(svo, userId,appId);
     }
 
     /**
@@ -182,20 +196,24 @@ public class WorkflowFacade {
      * 
      * @param vo
      * @param searchOptions
+     * @param appId
+     * 系统ID
      * @return
      */
-    public PageInfo<TaskDetailVO> getRunningApply(InstanceSearchVO svo){
-        return workflowService.getRunningApply(svo);
+    public PageInfo<TaskDetailVO> getRunningApply(InstanceSearchVO svo,String appId){
+        return workflowService.getRunningApply(svo,appId);
     }
 
     /**
      * 获取所有完成的流程
      * 
      * @param svo
+     * @param appId
+     * 系统ID
      * @return
      */
-    public PageInfo<TaskDetailVO> getFinishApply(InstanceSearchVO svo){
-        return workflowService.getFinishApply(svo);
+    public PageInfo<TaskDetailVO> getFinishApply(InstanceSearchVO svo,String appId){
+        return workflowService.getFinishApply(svo,appId);
     }
     
     

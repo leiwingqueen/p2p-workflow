@@ -114,42 +114,60 @@ public interface WorkflowService {
 
     /**
      * 待办列表
-     * 
+     * @param svo
+     * 查询条件
+     * @param userId
+     * 用户ID
+     * @param appId
+     * 系统ID
      * @return
+     * 任务列表
      */
-    PageInfo<TaskDetailVO> todoTaskList(TaskSearchVO svo,String userId);
+    PageInfo<TaskDetailVO> todoTaskList(TaskSearchVO svo,String userId,String appId);
 
     /**
      * 待签收列表
-     * 
+     * @param svo
+     * 查询条件
+     * @param userId
+     * 用户ID
+     * @param appId
+     * 系统ID
      * @return
+     * 任务列表
      */
-    PageInfo<TaskDetailVO> claimTaskList(TaskSearchVO svo,String userId);
+    PageInfo<TaskDetailVO> claimTaskList(TaskSearchVO svo,String userId,String appId);
 
     /**
      * 获取该用户的所有的申请
      * 
      * @param svo
+     * @param appId
+     * 系统ID
      * @return
      */
-    PageInfo<TaskDetailVO> getAllMyApply(InstanceSearchVO svo,String userId);
+    PageInfo<TaskDetailVO> getAllMyApply(InstanceSearchVO svo,String userId,String appId);
 
     /**
      * 获取所有进行的流程
      * 
      * @param vo
      * @param searchOptions
+     * @param appId
+     * 系统ID
      * @return
      */
-    PageInfo<TaskDetailVO> getRunningApply(InstanceSearchVO svo);
+    PageInfo<TaskDetailVO> getRunningApply(InstanceSearchVO svo,String appId);
 
     /**
      * 获取所有完成的流程
      * 
      * @param svo
+     * @param appId
+     * 系统ID
      * @return
      */
-    PageInfo<TaskDetailVO> getFinishApply(InstanceSearchVO svo);
+    PageInfo<TaskDetailVO> getFinishApply(InstanceSearchVO svo,String appId);
 
     /**
      * 

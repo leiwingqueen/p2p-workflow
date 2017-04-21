@@ -285,11 +285,13 @@ public class WorkflowServiceImpl implements WorkflowService {
      * 任务通用查询
      * 
      * @param svo
+     * @param appId
+     * 系统ID
      * @return
+     * 任务列表
      */
-    private PageInfo<TaskDetailVO> taskQuery(TaskSearchVO svo) {
+    private PageInfo<TaskDetailVO> taskQuery(TaskSearchVO svo,String appId) {
         PageInfo<TaskDetailVO> paginInfo = new PageInfo<TaskDetailVO>();
-
         TaskQuery query = taskService.createTaskQuery().includeProcessVariables();
         if (!StringUtils.isBlank(svo.getCandidateUser())) {
             query.taskCandidateUser(svo.getCandidateUser());
@@ -309,6 +311,10 @@ public class WorkflowServiceImpl implements WorkflowService {
         //摘要信息搜索，模糊搜索
         if(StringUtils.isNotBlank(svo.getAbstractInfo())){
             query.processVariableValueLike(PROCESS_ABSINFO_KEY, "%"+svo.getAbstractInfo()+"%");
+        }
+        //增加APP ID的搜索条件
+        if(StringUtils.isNotBlank(appId)){
+        	query.taskTenantId(appId);
         }
         //query.taskCategory("http://www.activiti.org/processdef");
         List<Task> tasks = query.orderByTaskCreateTime().desc().listPage(svo.getStart(),
@@ -409,9 +415,12 @@ public class WorkflowServiceImpl implements WorkflowService {
      * 实例查询公共方法
      * 
      * @param svo
+     * @param appId
+     * 系统ID
      * @return
+     * 流程实例
      */
-    private PageInfo<TaskDetailVO> instanceQuery(InstanceSearchVO svo) {
+    private PageInfo<TaskDetailVO> instanceQuery(InstanceSearchVO svo,String appId) {
         HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().includeProcessVariables();
         if (!StringUtils.isBlank(svo.getCreateUserId())) {
             query.startedBy(svo.getCreateUserId());
@@ -434,6 +443,10 @@ public class WorkflowServiceImpl implements WorkflowService {
         }
         if (svo.getFinishEnd() != null) {
             query.finishedBefore(svo.getFinishEnd());
+        }
+        //系统ID
+        if(StringUtils.isNotBlank(appId)){
+        	query.processInstanceTenantId(appId);
         }
         //摘要信息模糊搜索
         if(StringUtils.isNotBlank(svo.getAbstractInfo())){
@@ -613,35 +626,35 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public PageInfo<TaskDetailVO> todoTaskList(TaskSearchVO svo, String userId) {
+    public PageInfo<TaskDetailVO> todoTaskList(TaskSearchVO svo, String userId,String appId) {
         svo.setAssignee(userId);
-        return taskQuery(svo);
+        return taskQuery(svo,appId);
     }
 
     @Override
     public PageInfo<TaskDetailVO> claimTaskList(TaskSearchVO svo,
-            String userId) {
+            String userId,String appId) {
         svo.setCandidateUser(userId);
-        return taskQuery(svo);
+        return taskQuery(svo,appId);
     }
 
     @Override
     public PageInfo<TaskDetailVO> getAllMyApply(InstanceSearchVO svo,
-            String userId) {
+            String userId,String appId) {
         svo.setCreateUserId(userId);
-        return instanceQuery(svo);
+        return instanceQuery(svo,appId);
     }
 
     @Override
-    public PageInfo<TaskDetailVO> getRunningApply(InstanceSearchVO svo) {
+    public PageInfo<TaskDetailVO> getRunningApply(InstanceSearchVO svo,String appId) {
         svo.setFinish(InstanceSearchVO.UNFINISH);
-        return instanceQuery(svo);
+        return instanceQuery(svo,appId);
     }
 
     @Override
-    public PageInfo<TaskDetailVO> getFinishApply(InstanceSearchVO svo) {
+    public PageInfo<TaskDetailVO> getFinishApply(InstanceSearchVO svo,String appId) {
         svo.setFinish(InstanceSearchVO.FINISH);
-        return instanceQuery(svo);
+        return instanceQuery(svo,appId);
     }
     
     public class InstanceTaskData{
