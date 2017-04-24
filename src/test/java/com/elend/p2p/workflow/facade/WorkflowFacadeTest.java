@@ -83,7 +83,7 @@ public class WorkflowFacadeTest {
 
     @Test
     public void testClaimTaskList() {
-        PageInfo<TaskDetailVO> pageInfo=workflowFacade.claimTaskList(new TaskSearchVO(), "liyongquan");
+        PageInfo<TaskDetailVO> pageInfo=workflowFacade.claimTaskList(new TaskSearchVO(), "liyongquan","p2p-admin-web");
         System.out.println("list:"+pageInfo.getList());
     }
 
@@ -151,6 +151,32 @@ public class WorkflowFacadeTest {
         String deploymentId="94976";
         String newTenantId="testAppId";
         repositoryService.changeDeploymentTenantId(deploymentId, newTenantId);
+    }
+    
+    /**
+     * 把所有的流程的tenantId设置为p2p-admin-web
+     */
+    @Test
+    public void changeTenantId1(){
+        String newTenantId="p2p-admin-web";
+        for(ProcessDefinition queryResult:repositoryService.createProcessDefinitionQuery().orderByDeploymentId().desc().list()){
+            String deploymentId=queryResult.getDeploymentId();
+            repositoryService.changeDeploymentTenantId(deploymentId, newTenantId);
+            System.out.println(String.format("change deploymentId:%s,tenantId:%s",deploymentId,newTenantId));
+        }
+    }
+    
+    /**
+     * 车贷审批流程的APPID修改
+     */
+    @Test
+    public void changeTenantId2(){
+        String newTenantId="cds-admin-web";
+        for(ProcessDefinition queryResult:repositoryService.createProcessDefinitionQuery().processDefinitionKey("cpCarLoanAudit").list()){
+            String deploymentId=queryResult.getDeploymentId();
+            repositoryService.changeDeploymentTenantId(deploymentId, newTenantId);
+            System.out.println(String.format("change deploymentId:%s,tenantId:%s",deploymentId,newTenantId));
+        }
     }
     
     @Test
