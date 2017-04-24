@@ -52,10 +52,12 @@ public class WorkflowFacade {
      * 
      * @param paramMap
      * @param processDefinitionId
+     * @param appId
+     * 系统ID
      * @return
      */
-    public void create(String userId,Map<String, String> paramMap, String processDefinitionId){
-        workflowService.create(userId, paramMap, processDefinitionId);
+    public void create(String userId,Map<String, String> paramMap, String processDefinitionId,String appId){
+        workflowService.create(userId, paramMap, processDefinitionId,appId);
     }
 
     /**

@@ -33,9 +33,11 @@ public interface WorkflowService {
      * 
      * @param paramMap
      * @param processDefinitionId
+     * @param appId
+     * 系统ID
      * @return
      */
-    void create(String userId,Map<String, String> paramMap, String processDefinitionId);
+    void create(String userId,Map<String, String> paramMap, String processDefinitionId,String appId);
 
     /**
      * 任务处理逻辑

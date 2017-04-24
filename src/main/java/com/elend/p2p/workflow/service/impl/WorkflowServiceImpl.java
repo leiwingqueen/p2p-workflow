@@ -111,7 +111,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     @Override
     @Transactional(propagation=Propagation.REQUIRED)
     public void create(String userId, Map<String, String> paramMap,
-            String processDefinitionKey) {
+            String processDefinitionKey,String appId) {
         //repositoryService.changeDeploymentTenantId(deploymentId, newTenantId);
         identityService.setAuthenticatedUserId(userId);//增加统一的activiti登录验证
         InstanceExecuter handler = workflowFactory.getInstanceExecuter(processDefinitionKey);
@@ -128,9 +128,9 @@ public class WorkflowServiceImpl implements WorkflowService {
         if (absInfo != null) {
             variables.put(PROCESS_ABSINFO_KEY, absInfo);
         }
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKeyAndTenantId(processDefinitionKey,
                                                                                    businessKey,
-                                                                                   variables);
+                                                                                   variables,appId);
         
         //添加操作说明（提单固定为创建流程）
         paramMap.put(OPERATION_INSTRUCTION_KEY, "创建流程");
