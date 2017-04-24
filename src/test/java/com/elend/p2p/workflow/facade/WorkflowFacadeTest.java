@@ -2,10 +2,15 @@ package com.elend.p2p.workflow.facade;
 
 import static org.junit.Assert.fail;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.elend.p2p.PageInfo;
+import com.elend.p2p.util.OrderIdHelper;
 import com.elend.p2p.workflow.vo.TaskDetailVO;
 import com.elend.p2p.workflow.vo.TaskSearchVO;
 
@@ -26,6 +32,8 @@ public class WorkflowFacadeTest {
     private RepositoryService repositoryService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private RuntimeService runtimeService;
     @Test
     public void testClaim() {
         fail("Not yet implemented");
@@ -185,5 +193,18 @@ public class WorkflowFacadeTest {
         String newTenantId="testAppId";
         Deployment deploy=repositoryService.createDeployment().addClasspathResource(path).tenantId(newTenantId).deploy();
         System.out.println("deploy:"+deploy.getId());
+    }
+    
+    @Test
+    public void testStartProcess(){
+        String processDefinitionKey="withdrawApply";
+        String newTenantId="p2p-admin-web";
+        String businessKey=OrderIdHelper.newOrderId();
+        Map<String,Object> variables=new HashMap<String, Object>();
+        // 更新流程实例摘要信息
+        variables.put("abstract_info", "测试数据，请勿点击");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKeyAndTenantId(processDefinitionKey,
+                                                                                   businessKey,variables
+                                                                                   ,newTenantId);
     }
 }
